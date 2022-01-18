@@ -1,7 +1,6 @@
 const db = require("/Users/fynnmeredith/northcoders/Back-End/be-nc-games/db/connection")
 const format = require('pg-format');
-// const { formattedCategories } = require("../../utils");
-
+const { formatTables } = require('../../utils')
 
 const seed = (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
@@ -54,25 +53,25 @@ const seed = (data) => {
       })
       // 2. insert data
   .then(() => {
-    const formatCat = categoryData.map(cat => Object.values(cat));
+    const formatCat = formatTables(categoryData)
     const sql = format(`INSERT INTO categories (slug, description) VALUES %L RETURNING *;`, formatCat);
     return db.query(sql)
    .then(({ rows }) => {return rows})
   })
   .then(() => {
-    const formattedUsers = userData.map(user => Object.values(user));
+    const formattedUsers = formatTables(userData)
     const sql = format(`INSERT INTO users (username, avatar_url, name) VALUES %L RETURNING *;`, formattedUsers);
     return db.query(sql)
    .then(({ rows }) => { return rows })
   })
   .then(() => {
-    const formattedReviews = reviewData.map(review => Object.values(review));
+    const formattedReviews = formatTables(reviewData);
     const sql = format(`INSERT INTO reviews (title, designer, owner,  review_img_url, review_body, category, created_at, votes) VALUES %L RETURNING *;`, formattedReviews);
     return db.query(sql)
    .then(({ rows }) => {return rows})
   })
   .then(() => {
-    const formattedComments = commentData.map(comment => Object.values(comment));
+    const formattedComments = formatTables(commentData)
     const sql = format(`INSERT INTO comments (body, votes, author, review_id, created_at) VALUES %L RETURNING *;`, formattedComments);
     return db.query(sql)
    .then(({ rows }) => {return rows})
