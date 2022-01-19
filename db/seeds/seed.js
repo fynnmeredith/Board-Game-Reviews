@@ -35,7 +35,7 @@ const seed = (data) => {
           review_body TEXT NOT NULL,
           designer TEXT NOT NULL,
           review_img_url TEXT DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
-          votes INT DEFAULT 0,
+          votes INT DEFAULT 0 NOT NULL,
           category VARCHAR(100) NOT NULL REFERENCES categories(slug),
           owner VARCHAR(50) NOT NULL REFERENCES users(username),
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
@@ -46,7 +46,7 @@ const seed = (data) => {
           comment_id SERIAL PRIMARY KEY,
           author VARCHAR(50) REFERENCES users(username),
           review_id INT REFERENCES reviews(review_id),
-          votes INT DEFAULT 0,
+          votes INT  DEFAULT 0 NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           body TEXT NOT NULL
         )`)
