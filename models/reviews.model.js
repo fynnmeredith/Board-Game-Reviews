@@ -11,7 +11,9 @@ exports.selectReviewById = (id) => {
 }
 
 exports.updateReviewVotes = (incVotes, id) => {
-        return db.query(`UPDATE reviews SET votes= votes + $1 WHERE review_id=$2 RETURNING *;`, [incVotes, id]).then(({rows}) => {return rows[0]})
+        return db.query(`UPDATE reviews SET votes= votes + $1 WHERE review_id=$2 RETURNING *;`, [incVotes, id]).then(({rows}) => {
+            return rows[0]
+        })
 }
 
 exports.selectOrderedReview = (sort_by = 'created_at', order = 'DESC', category) => {
@@ -50,14 +52,4 @@ exports.selectOrderedReview = (sort_by = 'created_at', order = 'DESC', category)
      return db.query(sqlQuery, valuesArray).then(({rows}) => { 
          return rows
         })
-}
-
-exports.selectCommentsByReviewId = (id) => {
-    const { reviewId } = id;
-    const finalId = Number(Object.values(id));
-
-    return db.query(`SELECT comment_id, votes, created_at, author, body FROM comments WHERE review_id= $1`, [finalId]).then(({rows}) => {
-        console.log(rows)
-        return rows
-    })
 }
