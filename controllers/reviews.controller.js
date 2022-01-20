@@ -39,11 +39,3 @@ exports.getOrderedReview = (req, res, next) => {
         next(error)
     })
 }
-
-exports.getCommentsByReviewId = (req, res, next) => {
-    const reviewId = req.params
-    console.log(req.params)
-    selectCommentsByReviewId(reviewId).then((comments) => {
-        res.status(200).send({comments})
-    })
-}
