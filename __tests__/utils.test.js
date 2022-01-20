@@ -1,6 +1,9 @@
-const { formatTables } = require('../utils')
-const db = require('../db/connection')
-// const {categoryData, commentData, reviewData, userData} = reviewData;
+const { formatTables, checkReviewIdExists, checkUserExists } = require('../utils')
+const db = require('../db/connection');
+const { request } = require('express');
+const app = require('../app');
+
+afterAll(() => db.end());
 
 describe('formattedData', () => {
     test('function will return empty array if nothing is passed through the function', () => {
@@ -42,4 +45,30 @@ describe('formattedData', () => {
           ];
           expect(formatTables(data)).toEqual(output)
     })
+})
+
+describe('Checks whether review_id exists or whether it is invlaid', () => {
+  test('gets valid review Id', () => {
+    return checkReviewIdExists(1).then((res) => {
+      expect(res).toBe(true)
+  })
+})
+test('gets invalid review id', () => {
+  return checkReviewIdExists(200).then((res) => {
+    expect(res).toBe(false)
+})
+})
+})
+
+describe('Checks whether username exists or whether it is invlaid', () => {
+  test('gets valid username', () => {
+    return checkUserExists('mallionaire').then((res) => {
+      expect(res).toBe(true)
+  })
+})
+test('gets invalid review id', () => {
+  return checkUserExists('fynnmeredith').then((res) => {
+    expect(res).toBe(false)
+})
+})
 })
