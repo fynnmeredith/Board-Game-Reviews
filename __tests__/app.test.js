@@ -8,7 +8,7 @@ require('jest-sorted')
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe('GET /api/categories', () => {
+describe('/api/categories', () => {
     describe('GET', () => {
       test('status 200, will return an array of categories', () => {
         return request(app)
@@ -38,7 +38,7 @@ describe('GET /api/categories', () => {
     });
 })
 
-describe('GET /api/reviews/:review_id', () => {
+describe('/api/reviews/:review_id', () => {
   describe('GET', () => {
     test('status 200, will return a review object matching the review id entered with the addition of comment count', () => {
       return request(app)
@@ -80,7 +80,7 @@ describe('GET /api/reviews/:review_id', () => {
   });
 })
 
-describe('PATCH /api/reviews/:review_id', () => {
+describe('/api/reviews/:review_id', () => {
     describe('PATCH', () => {
       test('status 200, will return an updated votes count incrememented by the amount in request body', () => {
         return request(app)
@@ -128,9 +128,9 @@ describe('PATCH /api/reviews/:review_id', () => {
               });
         })
       })
-    });
+});
 
-describe('GET /api/reviews', () => {
+describe('/api/reviews', () => {
     describe('GET', () => {
       test('status 200, will return an array of reviews with comment_count', () => {
         return request(app)
@@ -200,10 +200,27 @@ describe('GET /api/reviews', () => {
                 expect(res.body.msg).toBe('Not Found');
             });
     });
+    test('status: 400 invalid query', () => {
+      return request(app)
+      .get('/api/reviews?sort_by=abc')
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe('Bad Request')
+      })
+    })
+    test('status: 400 invalid query', () => {
+      return request(app)
+      .get('/api/reviews?order=abc')
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe('Bad Request')
+      })
     })
   })
+})
 
-describe.only('GET /api/reviews/:review_id/comments', () => {
+describe('/api/reviews/:review_id/comments', () => {
+  describe('GET', () => {
   test('Status: 200, responds with an array of comments linked to the specified review id', () => {
     return request(app)
     .get('/api/reviews/2/comments')
@@ -214,11 +231,117 @@ describe.only('GET /api/reviews/:review_id/comments', () => {
   })
   test('Status: 200, responds with an array of comment objects relating to the passed review_id', () => {
     return request(app)
-    .get('/api/reviews/2/comments')
+    .get('/api/reviews/3/comments')
     .expect(200)
     .then((res) => {
-      
+      res.body.comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String)
+          })
+        )
+      })
+    })
+  })
+  test("200 and returns an empty array if review id is correct but there are no comments", () => {
+    return request(app)
+    .get('/api/reviews/4/comments')
+    .expect(200)
+    .then((res) => {
+      expect(res.body.comments).toHaveLength(0)
+    })
+   })
+  describe('GET ERRORS', () => {
+    test('Status: 400, request invalid', () => {
+      return request(app)
+      .get('/api/reviews/abc/comments')
+      .expect(400)
+      .then((res) => {
+          expect(res.body.msg).toBe('Bad Request');
+      });
+    })
+    test('Status: 404, id not found', () => {
+      return request(app)
+      .get('/api/reviews/2000/comments')
+      .expect(404)
+      .then((res) => {
+          expect(res.body.msg).toBe('Review ID Not Found');
+      });
+    })
+  })
+ })
+})
+
+describe('/api/reviews/:review_id/comments', () => {
+  describe('POST', () => {
+  test('Status: 201, returns newly added comment to the specified id', () => {
+    return request(app)
+    .post('/api/reviews/2/comments')
+    .send({
+      username: 'mallionaire',
+      body: 'Best board game I have ever played!'
+    })
+    .expect(201)
+    .then((res) => {
+      expect(res.body.comment).toEqual({
+        author: "mallionaire", 
+        body: "Best board game I have ever played!", 
+        comment_id: 7, 
+        created_at: expect.any(String), 
+        review_id: 2, 
+        votes: 0
+      })
+    })
+  })
+  describe('GET ERRORS', () => {
+    test('Status: 404, username invalid', () => {
+      return request(app)
+      .post('/api/reviews/2/comments')
+      .send({
+        username: 'fynnmeredith',
+        body: "not valid review"
+      })
+      .expect(404)
+      .then((res) => {
+          expect(res.body.msg).toBe('User Not Found');
+      });
+    })
+    test('Status: 400, not a review id', () => {
+      return request(app)
+      .post('/api/reviews/abc/comments')
+      .send({
+        username: 'mallionaire',
+      body: 'Best board game I have ever played!'
+      })
+      .expect(400)
+      .then((res) => {
+          expect(res.body.msg).toBe('Bad Request');
+      });
     })
   })
 })
+})
 
+describe('/api/comments/:comment_id', () => {
+  describe('DELETE', () => {
+  test('Status: 204, deletes comment by specified id', () => {
+    return request(app)
+    .delete('/api/comments/2')
+    .expect(204);
+  })
+})
+})
+
+describe('/api', () => {
+  describe('GET', () => {
+  test('status: 200, responds with JSON describing all available endpoints', () => {
+    return request(app)
+    .get('/api')
+    .expect(200)
+    })
+  })
+})
