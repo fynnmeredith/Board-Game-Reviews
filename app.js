@@ -3,7 +3,8 @@ const { getCategories } = require('./controllers/categories.controller');
 const { getReviewById, patchReviewVotes, getOrderedReview } = require('./controllers/reviews.controller');
 const {getCommentsByReviewId, postComment, deleteCommentbyId} = require('./controllers/comments.controller');
 const app = express();
-const fs = require('fs/promises')
+const fs = require('fs/promises');
+const { getUsernames } = require('./controllers/users.controller');
 // const errors = require('./errors')
 
 app.use(express.json());
@@ -33,12 +34,19 @@ app.get('/api', (req, res, next) => {
 	});
 });
 
+app.get('/api/users', getUsernames)
+
 app.all('*', (req, res) => {
 	res.status(404).send({ msg: 'Not Found' });
 });
 app.use((err, req, res, next) => {
-	if (err.code === '22P02' || err.code === '23502') {
-		res.status(400).send({ msg: 'Bad Request' });
+	if (err.code === '22P02'){
+		res.status(400).send({msg: 'Not a valid ID!'})
+	} else if (err.code === '23502'){
+		res.status(400).send({msg: 'No votes added, check you have entered the correct key and value'})
+	} else if (err.code === '42601' ||
+		err.code === '42703') {
+		res.status(400).send({ msg: 'Invalid query!' });
 	} else {
 		next(err);
 	}
