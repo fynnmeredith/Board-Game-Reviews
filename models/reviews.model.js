@@ -16,26 +16,7 @@ exports.updateReviewVotes = (incVotes, id) => {
 
 exports.selectOrderedReview = (sort_by = 'created_at', order = 'DESC', category) => {
 
-    const validKeys = [
-        'owner',
-        'title',
-        'review_id',
-        'review_body',
-        'designer',
-        'review_img_url',
-        'category',
-        'created_at',
-        'votes',
-        'comment_count',
-        'ASC',
-        'DESC'
-    ]
-
     const valuesArray = [];
-
-    if (!validKeys.includes(sort_by) || !validKeys.includes(order)) {
-        return Promise.reject({ status: 400, msg: 'Bad Request' });
-      }
 
     let sqlQuery = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, COUNT (comment_id) AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`;
     
