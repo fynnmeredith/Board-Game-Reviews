@@ -25,3 +25,14 @@ exports.checkUserExists = (username) => {
         }
     })
 }
+
+exports.checkCategoryExists = (category) => {
+    return db.query(`SELECT * FROM reviews WHERE category=$1`, [category])
+    .then(({rows}) => {
+        if(rows.length){
+            return true;
+        } else {
+            return false
+        }
+    })
+}
