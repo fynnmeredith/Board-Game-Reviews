@@ -16,13 +16,13 @@ const seed = (data) => {
   })
   .then(() => {
     return db.query(`CREATE TABLE categories (
-      slug VARCHAR(100) UNIQUE PRIMARY KEY,
+      slug VARCHAR(100) PRIMARY KEY NOT NULL,
       description TEXT NOT NULL
     );`)
   })
   .then(() => {
     return db.query(`CREATE TABLE users (
-        username VARCHAR(50) UNIQUE PRIMARY KEY,
+        username VARCHAR(50) PRIMARY KEY NOT NULL,
         avatar_url TEXT NOT NULL,
         name TEXT NOT NULL
       );`)
@@ -33,20 +33,20 @@ const seed = (data) => {
           title TEXT NOT NULL,
           review_body TEXT NOT NULL,
           designer TEXT NOT NULL,
-          review_img_url TEXT DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
+          review_img_url TEXT DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg' NOT NULL,
           votes INT DEFAULT 0 NOT NULL,
           category VARCHAR(100) NOT NULL REFERENCES categories(slug),
           owner VARCHAR(50) NOT NULL REFERENCES users(username),
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       );`)
   })
   .then(() => {
         return db.query(`CREATE TABLE comments (
           comment_id SERIAL PRIMARY KEY,
-          author VARCHAR(50) REFERENCES users(username),
+          author VARCHAR(50) REFERENCES users(username) NOT NULL,
           review_id INT REFERENCES reviews(review_id) NOT NULL,
           votes INT  DEFAULT 0 NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           body TEXT NOT NULL
         )`)
       })
