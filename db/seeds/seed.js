@@ -1,4 +1,4 @@
-const db = require("/Users/fynnmeredith/northcoders/Back-End/be-nc-games/db/connection")
+const db = require("../connection")
 const format = require('pg-format');
 const { formatTables } = require('../../utils')
 
