@@ -4,6 +4,7 @@ const { getReviewById, patchReviewVotes, getOrderedReview } = require('./control
 const {getCommentsByReviewId, postComment, deleteCommentbyId} = require('./controllers/comments.controller');
 const app = express();
 const fs = require('fs/promises')
+// const errors = require('./errors')
 
 app.use(express.json());
 
@@ -31,8 +32,6 @@ app.get('/api', (req, res, next) => {
 		next(err)
 	});
 });
-
-
 
 app.all('*', (req, res) => {
 	res.status(404).send({ msg: 'Not Found' });

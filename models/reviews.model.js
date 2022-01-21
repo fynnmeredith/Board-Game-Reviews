@@ -1,6 +1,4 @@
 const db = require('../db/connection.js')
-const { values } = require('../db/data/test-data/categories.js')
-const { commentData } = require('../db/data/test-data/index.js')
 
 exports.selectReviewById = (id) => {
      const { review_id } = id

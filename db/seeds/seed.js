@@ -4,7 +4,6 @@ const { formatTables } = require('../../utils')
 
 const seed = (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
-  // 1. create tables
   return db.query(`DROP TABLE IF EXISTS comments;`)
   .then(() => {
     return db.query(`DROP TABLE IF EXISTS reviews;`)
@@ -51,7 +50,6 @@ const seed = (data) => {
           body TEXT NOT NULL
         )`)
       })
-      // 2. insert data
   .then(() => {
     const formatCat = formatTables(categoryData)
     const sql = format(`INSERT INTO categories (slug, description) VALUES %L RETURNING *;`, formatCat);
