@@ -1,5 +1,5 @@
 const cors = require('cors')
-app.use(cors())
+
 const express = require('express');
 const { getCategories } = require('./controllers/categories.controller');
 const { getReviewById, patchReviewVotes, getOrderedReview } = require('./controllers/reviews.controller');
@@ -8,6 +8,8 @@ const app = express();
 const fs = require('fs/promises');
 const { getUsernames } = require('./controllers/users.controller');
 // const errors = require('./errors')
+
+app.use(cors())
 
 app.use(express.json());
 
