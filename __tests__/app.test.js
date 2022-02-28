@@ -137,7 +137,9 @@ describe("/api/reviews/:review_id", () => {
         })
         .expect(400)
         .then((res) => {
-          expect(res.body.msg).toBe("No votes added, check you have entered the correct key and value");
+          expect(res.body.msg).toBe(
+            "No votes added, check you have entered the correct key and value"
+          );
         });
     });
   });
