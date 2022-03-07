@@ -23,9 +23,12 @@ Go to your computer terminal and enter 'git clone ENTER_URL_HERE'.
 cd into the repository in your terminal and optionally open the repository in a code editor.
 
 #### STEP 5: 
-Create two env files within this repository: 1. '.env.development' with 'DBDATABASE=database_name' inside.  
+Create two env files within this repository: 
 
-2. '.env.test' with 'DBDATABASE=database_name_test' inside.
+`.env.development`
+with `DBDATABASE=database_name` inside.  
+
+`.env.test` with `DBDATABASE=database_name_test` inside.
 
 #### STEP 6: 
 Run the following commmands in your terminal: 
