@@ -13,7 +13,7 @@ const {
 } = require("./controllers/comments.controller");
 const app = express();
 const fs = require("fs/promises");
-const { getUsernames } = require("./controllers/users.controller");
+const { getUsernames, getUserByUsername } = require("./controllers/users.controller");
 
 app.use(cors());
 
@@ -33,6 +33,10 @@ app.post("/api/reviews/:review_id/comments", postComment);
 
 app.delete("/api/comments/:comment_id", deleteCommentbyId);
 
+app.get("/api/users", getUsernames);
+
+app.get("/api/users/:username", getUserByUsername)
+
 app.get("/api", (req, res, next) => {
   return fs
     .readFile("endpoints.json", "utf8")
@@ -43,8 +47,6 @@ app.get("/api", (req, res, next) => {
       next(err);
     });
 });
-
-app.get("/api/users", getUsernames);
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Not Found" });

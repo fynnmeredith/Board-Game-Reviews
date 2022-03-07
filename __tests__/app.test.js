@@ -419,3 +419,30 @@ describe("/api/users", () => {
     });
   });
 });
+
+describe("/api/users/:username", () => {
+  describe("GET", () => {
+    test("status 200, will return a user object matching the username entered", () => {
+      return request(app)
+        .get("/api/users/bainesface")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.user).toEqual({
+            username: 'bainesface',
+            name: expect.any(String),
+            avatar_url: expect.any(String)
+          });
+        });
+    });
+  });
+  describe("GET ERRORS", () => {
+    test("status: 404 and reurns NOT FOUND error msg", () => {
+      return request(app)
+      .get("/api/users/notRealUser")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Not Found")
+      });
+    });
+  });
+});
