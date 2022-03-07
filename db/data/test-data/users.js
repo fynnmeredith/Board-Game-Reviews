@@ -1,24 +1,24 @@
 module.exports = [
   {
     username: 'mallionaire',
-    name: 'haz',
     avatar_url:
-      'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+      'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+    name: 'haz'
   },
   {
     username: 'philippaclaire9',
-    name: 'philippa',
-    avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4'
+    avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+    name: 'philippa'
   },
   {
     username: 'bainesface',
-    name: 'sarah',
-    avatar_url: 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4'
+    avatar_url: 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4',
+    name: 'sarah'
   },
   {
     username: 'dav3rid',
-    name: 'dave',
     avatar_url:
-      'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png'
+    'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+    name: 'dave'
   }
 ];
