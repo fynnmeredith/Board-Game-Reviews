@@ -28,7 +28,20 @@ Create two env files within this repository: 1. '.env.development' with 'DBDATAB
 2. '.env.test' with 'DBDATABASE=database_name_test' inside.
 
 #### STEP 6: 
-Run the following commmands in your terminal: 'npm install' , 'npm setup-dbs' , 'npm run-seed'.
+Run the following commmands in your terminal: 
+```
+npm install
+```
+```
+npm run setup-dbs 
+```
+```
+npm run-seed
+```
 
 #### STEP 7: 
-You can then run the test file by running 'npm test app' in your terminal.
+You can then run the test file by running 
+```
+npm test app
+```
+in your terminal.
