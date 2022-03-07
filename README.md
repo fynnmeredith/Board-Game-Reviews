@@ -36,7 +36,7 @@ npm install
 npm run setup-dbs 
 ```
 ```
-npm run-seed
+npm run seed
 ```
 
 #### STEP 7: 
