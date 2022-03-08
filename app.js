@@ -5,6 +5,7 @@ const {
   getReviewById,
   patchReviewVotes,
   getOrderedReview,
+  postReview
 } = require("./controllers/reviews.controller");
 const {
   getCommentsByReviewId,
@@ -48,6 +49,8 @@ app.get("/api", (req, res, next) => {
     });
 });
 
+app.post("/api/reviews", postReview)
+
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Not Found" });
 });
@@ -58,10 +61,12 @@ app.use((err, req, res, next) => {
     res
       .status(400)
       .send({
-        msg: "No votes added, check you have entered the correct key and value",
+        msg: "Check you have entered a valid value",
       });
   } else if (err.code === "42601" || err.code === "42703") {
     res.status(400).send({ msg: "Invalid query!" });
+  } else if (err.code === "23503"){
+    res.status(404).send({ msg: "Invalid input" });
   } else {
     next(err);
   }

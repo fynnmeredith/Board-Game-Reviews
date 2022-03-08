@@ -3,7 +3,9 @@ const {
   updateReviewVotes,
   selectOrderedReview,
   selectCommentsByReviewId,
+  addReview,
 } = require("../models/reviews.model");
+const { checkUserExists, checkCategoryExists } = require('../utils')
 
 exports.getReviewById = (req, res, next) => {
   const review_id = req.params;
@@ -45,4 +47,21 @@ exports.getOrderedReview = (req, res, next) => {
     .catch((error) => {
       next(error);
     });
+};
+
+exports.postReview = (req, res, next) => {
+  const newReview = req.body;
+  const user = newReview.owner
+  const category = newReview.category
+
+  return Promise.all([checkUserExists(user), checkCategoryExists(category)]).then((values) => {
+    if(values){
+      return addReview(newReview).then((review) => {
+        res.status(201).send({ review })
+      })
+    } 
+  })
+  .catch((error) => {
+    next(error)
+  })
 };

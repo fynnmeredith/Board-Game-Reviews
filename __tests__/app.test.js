@@ -138,7 +138,7 @@ describe("/api/reviews/:review_id", () => {
         .expect(400)
         .then((res) => {
           expect(res.body.msg).toBe(
-            "No votes added, check you have entered the correct key and value"
+            "Check you have entered a valid value"
           );
         });
     });
@@ -328,7 +328,7 @@ describe("/api/reviews/:review_id/comments", () => {
           });
         });
     });
-    describe("GET ERRORS", () => {
+    describe("POST ERRORS", () => {
       test("Status: 404, username invalid", () => {
         return request(app)
           .post("/api/reviews/2/comments")
@@ -438,11 +438,73 @@ describe("/api/users/:username", () => {
   describe("GET ERRORS", () => {
     test("status: 404 and reurns NOT FOUND error msg", () => {
       return request(app)
-      .get("/api/users/notRealUser")
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("Not Found")
-      });
+        .get("/api/users/notRealUser")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Not Found")
+        });
     });
   });
+});
+
+describe("/api/reviews", () => {
+  describe("POST", () => {
+    test("Status 201, returns newly added review", () => {
+      return request(app)
+        .post("/api/reviews")
+        .send({
+          owner: "bainesface",
+          title: "Cludo",
+          review_body: "Murder mystery, who was the killer? What an exciting game to play with the kids.",
+          designer: "Mr Cludo",
+          category: "social deduction"
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.review).toEqual({
+            owner: "bainesface",
+            title: "Cludo",
+            review_body: "Murder mystery, who was the killer? What an exciting game to play with the kids.",
+            designer: "Mr Cludo",
+            category: "social deduction",
+            review_id: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            review_img_url: expect.any(String)
+          })
+        })
+    })
+  })
+  describe("POST ERRORS", () => {
+    test("Status: 404, username invalid", () => {
+      return request(app)
+        .post("/api/reviews")
+        .send({
+          owner: "fynn",
+          title: "Cludo",
+          review_body: "Murder mystery, who was the killer? What an exciting game to play with the kids.",
+          designer: "Mr Cludo",
+          category: "social deduction"
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input")
+        })
+    })
+    test("Status: 404, category invalid", () => {
+      return request(app)
+        .post("/api/reviews")
+        .send({
+          owner: "bainesface",
+          title: "Cludo",
+          review_body: "Murder mystery, who was the killer? What an exciting game to play with the kids.",
+          designer: "Mr Cludo",
+          category: "not a category"
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input")
+        })
+    })
+  })
 });
