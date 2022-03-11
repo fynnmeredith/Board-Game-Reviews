@@ -51,10 +51,11 @@ exports.addReview = (review) => {
   
   return db
     .query(
-      `INSERT INTO reviews (owner, title, review_body, designer, category) VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-      [owner, title, review_body, designer, category]
+      `INSERT INTO reviews (owner, title, review_body, designer, category) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [owner, title, review_body, designer, category]
     )
     .then(({ rows }) => {
-      return rows[0]
+      review = rows[0]
+      review.comment_count = 0
+      return review;
     })
 };

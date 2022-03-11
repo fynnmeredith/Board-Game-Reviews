@@ -469,6 +469,7 @@ describe("/api/reviews", () => {
             category: "social deduction",
             review_id: expect.any(Number),
             votes: 0,
+            comment_count: 0,
             created_at: expect.any(String),
             review_img_url: expect.any(String)
           })
