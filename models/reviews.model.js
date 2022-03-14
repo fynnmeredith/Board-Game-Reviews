@@ -59,3 +59,10 @@ exports.addReview = (review) => {
       return review;
     })
 };
+
+exports.deleteReview = (id) => {
+  const { review_id } = id;
+  return db
+    .query(`DELETE FROM reviews WHERE review_id = $1`, [review_id])
+    .then(() => {});
+};

@@ -5,7 +5,8 @@ const {
   getReviewById,
   patchReviewVotes,
   getOrderedReview,
-  postReview
+  postReview,
+  deleteReviewByReviewId
 } = require("./controllers/reviews.controller");
 const {
   getCommentsByReviewId,
@@ -50,6 +51,8 @@ app.get("/api", (req, res, next) => {
 });
 
 app.post("/api/reviews", postReview)
+
+app.delete("/api/reviews/:review_id", deleteReviewByReviewId)
 
 app.all("*", (req, res) => {
   res.status(404).send({ msg: "Not Found" });
