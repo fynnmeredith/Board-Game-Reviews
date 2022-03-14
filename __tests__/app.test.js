@@ -509,3 +509,21 @@ describe("/api/reviews", () => {
     })
   })
 });
+
+describe("/api/reviews/:review_id", () => {
+  describe("DELETE", () => {
+    test("Status: 204, deletes review by specified id", () => {
+      return request(app).delete("/api/reviews/6").expect(204);
+    });
+  });
+  describe("ERRORS /api/reviews/:review_id", () => {
+    test("status: 404 non existent ID entered", () => {
+      return request(app)
+        .get("/api/reviews/9999")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Not Found");
+        });
+    });
+  });
+});
