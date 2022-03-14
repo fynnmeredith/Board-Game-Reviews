@@ -26,9 +26,9 @@ cd into the repository in your terminal and optionally open the repository in a 
 Create two env files within this repository: 
 
 `.env.development`
-with `DBDATABASE=database_name` inside.  
+with `PGDATABASE=database_name` inside.  
 
-`.env.test` with `DBDATABASE=database_name_test` inside.
+`.env.test` with `PGDATABASE=database_name_test` inside.
 
 #### STEP 6: 
 Run the following commmands in your terminal: 
