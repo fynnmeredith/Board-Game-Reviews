@@ -6,7 +6,7 @@ const {
   addReview,
   deleteReview
 } = require("../models/reviews.model");
-const { checkUserExists, checkCategoryExists } = require('../utils')
+const { checkUserExists, checkCategoryExists, checkReviewIdExists } = require('../utils')
 
 exports.getReviewById = (req, res, next) => {
   const review_id = req.params;
@@ -67,12 +67,20 @@ exports.postReview = (req, res, next) => {
 };
 
 exports.deleteReviewByReviewId = (req, res, next) => {
-  const review_id = req.params;
-  deleteReview(review_id).then(() => {
-    res.status(204).send();
+  const { review_id } = req.params;
+  const numberId = parseInt(review_id)
+
+  return checkReviewIdExists(review_id).then((doesIdExist) => {
+    if(doesIdExist){
+      return deleteReview(review_id).then((review) => {
+        res.status(204).send({})
+      })
+    } else {
+      return Promise.reject({ status: 404, msg: "Review not found" });
+    }
   })
-  .catch((error) => {
-    next(error)
-  })
+ .catch((error) => {
+   next(error)
+ })
 };
 

@@ -60,9 +60,13 @@ exports.addReview = (review) => {
     })
 };
 
-exports.deleteReview = (id) => {
-  const { review_id } = id;
-  return db
-    .query(`DELETE FROM reviews WHERE review_id = $1`, [review_id])
-    .then(() => {});
+exports.deleteReview = async (review_id) => {
+  const commentQuery = `DELETE FROM comments WHERE review_id = $1`
+
+  await db.query(commentQuery, [review_id])
+
+  const reviewQuery = `DELETE FROM reviews WHERE review_id = $1`
+  
+  await db.query(reviewQuery, [review_id])
+  
 };

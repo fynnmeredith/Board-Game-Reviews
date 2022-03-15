@@ -510,20 +510,52 @@ describe("/api/reviews", () => {
   })
 });
 
-describe("/api/reviews/:review_id", () => {
+describe.only("/api/reviews/:review_id", () => {
   describe("DELETE", () => {
     test("Status: 204, deletes review by specified id", () => {
-      return request(app).delete("/api/reviews/6").expect(204);
+      return request(app)
+      .delete('/api/reviews/1')
+      .expect(204)
+      .then((res) => {
+        expect(res.body).toEqual({})
+        const query = `SELECT * FROM reviews WHERE review_id = 1;`
+
+        return db.query(query)
+      })
+      .then((res) => {
+        expect(res.rows).toEqual([])
+      })
     });
+    test("status 204, deletes all comments linked with review_id", () => {
+      return request(app)
+      .delete('/api/reviews/8')
+      .expect(204)
+      .then(() => {
+        const query = `SELECT * FROM comments WHERE review_id = 8`
+
+        return db.query(query)
+      })
+      .then((res) => {
+        expect(res.rows).toEqual([])
+      })
+    })
   });
   describe("ERRORS /api/reviews/:review_id", () => {
-    test("status: 404 non existent ID entered", () => {
+    test("status: 404 review does not exist", () => {
       return request(app)
-        .get("/api/reviews/9999")
+        .delete("/api/reviews/9999")
         .expect(404)
         .then((res) => {
-          expect(res.body.msg).toBe("Not Found");
+          expect(res.body.msg).toBe("Review not found");
         });
     });
+    test("status 400, invalid review_id entered", () => {
+      return request(app)
+      .delete('/api/reviews/string')
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Not a valid ID!")
+      })
+    })
   });
 });
